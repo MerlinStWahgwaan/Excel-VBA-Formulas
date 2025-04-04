@@ -41,7 +41,7 @@ The process involves accessing it (it’s built into Excel but hidden by default
 - **No Developer Tab Option?** The `Alt + F11` shortcut works regardless, so you don’t *need* the Developer tab unless you want ribbon access.
 - **Excel Version:** This works in all modern Excel versions (Windows and Mac), though the Mac interface might look slightly different.
 
-### Steps to Install Custom VBA Formulas
+### Steps to Install Custom VBA Formulas Manually via Copy-Paste
 
 1. **Open the VBA Editor:**
    - In Excel, press `Alt + F11` to open the Visual Basic for Applications (VBA) editor.
@@ -72,6 +72,41 @@ The process involves accessing it (it’s built into Excel but hidden by default
   - Use **`ThisWorkbook`** for event-driven code (e.g., `Workbook_SheetActivate`).
 - **Security:** Ensure macros are enabled each time you open the file, or place the code in a trusted location.
 - **Testing:** Test with simple data first to confirm the function behaves as expected.
+
+- ### Steps to Install Custom VBA Formulas via Import ( .bas  or. .cls )
+
+- Here’s a brief guide on how to import a custom VBA `.bas` (module) or `.cls` (class module) file into Excel to use its code:
+
+### Steps to Import a `.bas` or `.cls` File
+
+1. **Open the VBA Editor:**
+   - In Excel, press `Alt + F11` to open the VBA Editor.
+
+2. **Locate Your Project:**
+   - In the "Project" window (usually on the left), find your workbook’s name (e.g., `VBAProject (Book1)`).
+
+3. **Import the File:**
+   - Go to `File > Import File` in the VBA Editor menu (or right-click the project name and select `Import File`).
+   - Browse to the location of your `.bas` (standard module) or `.cls` (class module) file.
+   - Select the file and click `Open`.
+   - The imported module or class will appear under your project (e.g., `Module1` for a `.bas` file or the class name for a `.cls` file).
+
+4. **Verify the Code:**
+   - Double-click the imported item in the Project window to view its code in the editor. Ensure it looks correct.
+
+5. **Save the Workbook:**
+   - Close the VBA Editor (`Alt + Q` or the red X).
+   - Save your workbook as an Excel Macro-Enabled Workbook (`.xlsm`) via `File > Save As > Excel Macro-Enabled Workbook`.
+
+6. **Test the Code:**
+   - If it’s a function (e.g., from a `.bas` file), use it in a cell (e.g., `=YourFunctionName()`).
+   - If it’s a class (from a `.cls` file), it’s typically used in other VBA code rather than directly in worksheets.
+
+#### Notes
+- **`.bas` Files:** Contain standard VBA code (e.g., functions like `SumByColor` or `PrevSheet`).
+- **`.cls` Files:** Contain class definitions (e.g., `ThisWorkbook` or custom objects).
+- **Duplicates:** If a module/class with the same name already exists, VBA may rename the imported one (e.g., `Module1_1`).
+- **Macros Enabled:** Ensure macros are enabled when reopening the workbook (`Enable Content` prompt).
 
 ----------------------------------------------------------------------------------------------
 
