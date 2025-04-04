@@ -1,4 +1,4 @@
-Attribute VB_Name = "Module2"
+Attribute VB_Name = "SumConditionalColorCells"
 Function SumConditionColorCells(CellsRange As Range, ColorRng As Range)
 Dim Bambo As Boolean
 Dim dbw As String

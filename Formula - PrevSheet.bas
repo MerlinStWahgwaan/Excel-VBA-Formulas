@@ -1,4 +1,4 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "PrevSheet"
 Function PrevSheet(rng As Range) As Range
     Application.Volatile
     Dim ws As Worksheet

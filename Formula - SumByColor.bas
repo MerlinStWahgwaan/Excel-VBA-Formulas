@@ -1,4 +1,4 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "SumByColor"
 Function SumByColor(SumRange As Range, SumColor As Range)
 Application.Volatile
 Dim SumColorValue As Integer
