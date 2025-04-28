@@ -317,6 +317,7 @@ End Sub
 Private Sub Workbook_SheetDeactivate(ByVal Sh As Object)
     Application.CalculateFull ' Recalculate all formulas when leaving a sheet
 End Sub
+
 ---
 
 #### Breakdown of Components
