@@ -3,6 +3,24 @@
 This is an evolving repo of custom Excel VBA that I've put together and found useful in many circumstances,
 so i figured I'd share.
 
+#### Sections
+
+Steps to Enable/Access the VBA Editor [Link Text](#steps-to-enableaccess-the-vba-editor)
+Steps to Install Custom VBA Formulas Manually via Copy-Paste [Link Text](#steps-to-install-custom-vba-formulas-manually-via-copy-paste)
+Steps to Install Custom VBA Formulas via Import ( .bas  or. .cls ) [Link Text](#steps-to-install-custom-vba-formulas-via-import--bas--or-cls-)
+
+#### Custom Formulas
+
+SumByColor [Link Text](#sumbycolor----add-as-module-)
+SumConditionColorCells [Link Text](#sumconditioncolorcells----add-as-module-)
+PrevSheet [Link Text](#prevsheet----add-as-module-)
+
+Key Differences between SumByColor and SumConditionColorCells [Link Text](#key-differences-between-sumbycolor-and-sumconditioncolorcells)
+
+#### Custom Actions
+
+AddSheetChangeAction [Link Text](#-addsheetchangeaction-----add-to-thisworkbook-)
+
 ----------------------------------------------------------------------------------------------
 
 ## Steps to Enable/Access the VBA Editor
@@ -73,11 +91,11 @@ The process involves accessing it (it’s built into Excel but hidden by default
 - **Security:** Ensure macros are enabled each time you open the file, or place the code in a trusted location.
 - **Testing:** Test with simple data first to confirm the function behaves as expected.
 
-- ### Steps to Install Custom VBA Formulas via Import ( .bas  or. .cls )
+### Steps to Install Custom VBA Formulas via Import ( .bas  or. .cls )
 
 - Here’s a brief guide on how to import a custom VBA `.bas` (module) or `.cls` (class module) file into Excel to use its code:
 
-### Steps to Import a `.bas` or `.cls` File
+#### Steps to Import a `.bas` or `.cls` File
 
 1. **Open the VBA Editor:**
    - In Excel, press `Alt + F11` to open the VBA Editor.
