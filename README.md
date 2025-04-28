@@ -5,21 +5,26 @@ so i figured I'd share.
 
 #### Sections
 
-Steps to Enable/Access the VBA Editor [Link Text](#steps-to-enableaccess-the-vba-editor)
-Steps to Install Custom VBA Formulas Manually via Copy-Paste [Link Text](#steps-to-install-custom-vba-formulas-manually-via-copy-paste)
-Steps to Install Custom VBA Formulas via Import ( .bas  or. .cls ) [Link Text](#steps-to-install-custom-vba-formulas-via-import--bas--or-cls-)
+[Steps to Enable/Access the VBA Editor](#steps-to-enableaccess-the-vba-editor)
+
+[Steps to Install Custom VBA Formulas Manually via Copy-Paste](#steps-to-install-custom-vba-formulas-manually-via-copy-paste)
+
+[Steps to Install Custom VBA Formulas via Import ( .bas  or. .cls )](#steps-to-install-custom-vba-formulas-via-import--bas--or-cls-)
 
 #### Custom Formulas
 
-SumByColor [Link Text](#sumbycolor----add-as-module-)
-SumConditionColorCells [Link Text](#sumconditioncolorcells----add-as-module-)
-PrevSheet [Link Text](#prevsheet----add-as-module-)
+[Sum By Color](#sumbycolor----add-as-module-)
 
-Key Differences between SumByColor and SumConditionColorCells [Link Text](#key-differences-between-sumbycolor-and-sumconditioncolorcells)
+[Sum Conditionaly Colored Cells](#sumconditioncolorcells----add-as-module-)
+
+[Previous Sheet](#prevsheet----add-as-module-)
+
+[Key Differences between SumByColor and SumConditionColorCells](#key-differences-between-sumbycolor-and-sumconditioncolorcells)
+
 
 #### Custom Actions
 
-AddSheetChangeAction [Link Text](#-addsheetchangeaction-----add-to-thisworkbook-)
+[Add Sheet Change Action](#-addsheetchangeaction-----add-to-thisworkbook-)
 
 ----------------------------------------------------------------------------------------------
 
