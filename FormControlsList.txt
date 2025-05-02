@@ -1,0 +1,151 @@
+Control List for CopyConditionalFillColorForm
+Generated on: 01-05-2025 9:07:56 PM
+--------------------------------------------------
+Control Type: Label
+Name: LabelSheet
+Caption: Source Worksheet:
+Height: 18
+Left: 16
+Top: 24
+Width: 100
+--------------------------------------------------
+Control Type: ComboBox
+Name: ComboBoxSheet
+Height: 21
+Left: 120
+Top: 24
+Width: 257
+--------------------------------------------------
+Control Type: Label
+Name: LabelSourceRange
+Caption: Source Range:
+Height: 18
+Left: 16
+Top: 88
+Width: 100
+--------------------------------------------------
+Control Type: TextBox
+Name: TextBoxSourceRange
+Height: 21
+Left: 120
+Top: 88
+Width: 240
+--------------------------------------------------
+Control Type: Label
+Name: LabelTargetRange
+Caption: Target Range:
+Height: 18
+Left: 16
+Top: 126
+Width: 100
+--------------------------------------------------
+Control Type: TextBox
+Name: TextBoxTargetRange
+Height: 21
+Left: 120
+Top: 126
+Width: 240
+--------------------------------------------------
+Control Type: Label
+Name: LabelProperties
+Caption: Properties to Copy:
+Height: 18
+Left: 16
+Top: 162
+Width: 100
+--------------------------------------------------
+Control Type: CheckBox
+Name: CheckBoxFill
+Caption: Fill Color
+Height: 18
+Left: 24
+Top: 185
+Width: 100
+--------------------------------------------------
+Control Type: CheckBox
+Name: CheckBoxFontColor
+Caption: Font Color
+Height: 18
+Left: 24
+Top: 215
+Width: 100
+--------------------------------------------------
+Control Type: CheckBox
+Name: CheckBoxBold
+Caption: Bold (On/Off)
+Height: 18
+Left: 192
+Top: 185
+Width: 100
+--------------------------------------------------
+Control Type: CheckBox
+Name: CheckBoxItalic
+Caption: Italic (On/Off)
+Height: 18
+Left: 192
+Top: 215
+Width: 100
+--------------------------------------------------
+Control Type: CheckBox
+Name: CheckBoxBorders
+Caption: Borders
+Height: 18
+Left: 24
+Top: 245
+Width: 100
+--------------------------------------------------
+Control Type: CheckBox
+Name: CheckBoxNumberFormat
+Caption: Number Format (%, $)
+Height: 18
+Left: 192
+Top: 245
+Width: 100
+--------------------------------------------------
+Control Type: CommandButton
+Name: ButtonOK
+Caption: OK
+Height: 25
+Left: 294
+Top: 270
+Width: 89
+--------------------------------------------------
+Control Type: CommandButton
+Name: ButtonCancel
+Caption: Cancel
+Height: 25
+Left: 186
+Top: 270
+Width: 89
+--------------------------------------------------
+Control Type: CommandButton
+Name: ButtonSelectSource
+Caption: V
+Height: 21
+Left: 360
+Top: 88
+Width: 18
+--------------------------------------------------
+Control Type: CommandButton
+Name: ButtonSelectTarget
+Caption: V
+Height: 21
+Left: 360
+Top: 126
+Width: 18
+--------------------------------------------------
+Control Type: Label
+Name: LabelTargetSheet
+Caption: Target Worksheet:
+Height: 18
+Left: 16
+Top: 56
+Width: 100
+--------------------------------------------------
+Control Type: ComboBox
+Name: ComboBoxTargetSheet
+Height: 21
+Left: 120
+Top: 56
+Width: 257
+--------------------------------------------------

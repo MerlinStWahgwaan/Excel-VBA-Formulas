@@ -26,6 +26,8 @@ so i figured I'd share.
 
 [Add Sheet Change Action](#-addsheetchangeaction-----add-to-thisworkbook-)
 
+(Copy Conditionally Formated Fill Color)(#-CopyConditionalFillColor-----add-as-module-and-userform-)
+
 ----------------------------------------------------------------------------------------------
 
 ## Steps to Enable/Access the VBA Editor
@@ -409,3 +411,122 @@ This creates a highly aggressive recalculation strategy: almost any interaction 
 - **Debounce:** Add a delay or check to avoid multiple recalculations in quick succession (though this is trickier in VBA).
 
 ----------------------------------------------------------------------------------------------
+
+### `CopyConditionalFillColor` - *Add as Module and UserForm*
+
+#### **Purpose:**
+The `CopyConditionalFillColor` macro copies displayed formatting properties (e.g., fill colors, font colors, bold, italic, borders, number formats) from a source range to a target range in an Excel worksheet. It uses the `DisplayFormat` property to capture formatting applied via **conditional formatting**, which is not accessible through standard copy operations. A UserForm interface allows users to select source and target worksheets, specify source and target ranges with mouse-based selection, and choose properties to copy, with validation to ensure correct inputs.
+
+This macro enables you to convert conditional formatting into static formats, allowing you to remove conditional formatting rules while preserving the displayed formatting at the time of copying. It’s ideal for “locking in” formatting for sharing or further processing.
+
+#### **How to Install:**
+1. **Add the Module and UserForm:**
+   - Place `CopyConditionalFillColorForm.frx` in the same directory as `CopyConditionalFillColorForm.frm` before importing.
+   - Import **BOTH** `CopyConditionalFillColor.bas` and `CopyConditionalFillColorForm.frm` into your VBA project (see [Steps to Install Custom VBA Formulas via Import](#steps-to-install-custom-vba-formulas-via-import--bas--or-cls-)).
+
+2. ##### **Manual Creation (Fallback):**
+   - See [Manual Form Creation Instructions](CopyConditionalFillColorForm---Manual-Form-Creation-Instructions.md)
+
+#### **How It Works:**
+
+- **Inputs (via UserForm):**
+  - **Source Worksheet:** Selected from a dropdown listing all worksheets in the workbook.
+  - **Target Worksheet:** Selected from a dropdown listing all worksheets in the workbook.
+  - **Source Range:** Specified via a TextBox, with a “Select” button for mouse-based range selection.
+  - **Target Range:** Specified via a TextBox, with a “Select” button for mouse-based range selection.
+  - **Properties to Copy:** Chosen via CheckBoxes for Fill Color, Font Color, Bold, Italic, Borders, and Number Format.
+
+- **Logic:**
+  1. Displays a UserForm (`CopyConditionalFillColorForm`) with:
+     - ComboBoxes for selecting source and target worksheets (default: active sheet).
+     - TextBoxes for source and target ranges (default: `A1`).
+     - “Select” buttons to open a range selection dialog (`Application.InputBox` with `Type:=8`), ensuring ranges are on the selected worksheets.
+     - CheckBoxes to choose formatting properties (Fill Color and Font Color checked by default).
+     - OK and Cancel buttons.
+
+  2. When the user clicks OK:
+     - Validates inputs:
+       - Ensures source and target worksheets are valid.
+       - Verifies source and target ranges are valid.
+       - Checks that source and target ranges have the same number of cells.
+       - Confirms at least one property is selected.
+     - If validation fails, displays an error message and keeps the UserForm open for corrections.
+     - If valid, retrieves the source range’s displayed formatting using `DisplayFormat` properties (e.g., `DisplayFormat.Interior.Color`, `DisplayFormat.Font.Color`).
+     - Applies the selected properties as static formats to the target range, adjusting for relative cell positions.
+
+  3. If the user clicks Cancel, the macro exits without changes.
+
+  4. Displays a success message when complete.
+- **Key Features:**
+  - Captures conditional formatting appearance using `DisplayFormat`, not just manual formats.
+  - Supports multiple formatting properties (not limited to fill colors).
+  - Mouse-based range selection mimics Excel’s **Insert Function** dialog for intuitive input.
+  - Validates range sizes and inputs to prevent errors.
+  - Flexible source and target worksheet selection via dropdowns.
+
+#### **Example Use Case:**
+- **Setup:** On `Sheet1`, range `A1:C10` has conditional formatting (e.g., values > 10: yellow fill, red font, bold; values < 5: blue border, italic, currency format). You want to copy these formats to `Sheet2!D1:F10` as static formats.
+- **Action:**
+  - Run the macro, select `Sheet1` in the source worksheet dropdown and `Sheet2` in the target worksheet dropdown.
+  - Click “Select” for Source Range, choose `A1:C10` with the mouse.
+  - Click “Select” for Target Range, choose `D1:F10` on `Sheet2`.
+  - Check desired properties (e.g., Fill Color, Font Color, Bold).
+  - Click OK.
+- **Result:** `Sheet2!D1:F10` has static formats matching the displayed formatting of `Sheet1!A1:C10` (e.g., yellow fills, red fonts, bold where applicable).
+
+
+#### **How to Use:**
+
+1. **Add the Module and UserForm:** (see [Steps to Install Custom VBA Formulas via Import](#steps-to-install-custom-vba-formulas-via-import--bas--or-cls-)).
+
+2. **Run the Macro:**
+   - Go to `Developer > Macros` (or `Alt + F8`), select `CopyConditionalFillColor`, and click `Run`.
+   - Alternatively, assign the macro to a button or run it via the VBA Editor.
+
+3. **Use the UserForm:**
+   - **Select Worksheets:** Choose the source and target worksheets from the dropdowns (default: active sheet).
+   - **Select Source Range:** Click the “Select” button next to “Source Range” to choose a range with the mouse (e.g., `A1:C10`) on the source worksheet. Alternatively, type the range address.
+   - **Select Target Range:** Click the “Select” button next to “Target Range” to choose a range (e.g., `D1:F10`) on the target worksheet. Alternatively, type the address.
+   - **Choose Properties:** Check the properties to copy (e.g., Fill Color, Font Color). At least one must be selected.
+   - **Confirm:** Click OK to apply the formats. If inputs are invalid (e.g., mismatched range sizes, invalid worksheets), an error message will prompt you to correct them. Click Cancel to exit without changes.
+
+4. **Verify Output:**
+   - Check the target range for the applied static formats (visible in `Home > Format Cells > Fill`, `Font`, etc.).
+   - The source range’s conditional formatting remains unchanged.
+
+5. **Post-Processing (Optional):**
+   - **Delete Conditional Formatting Rules:** If no longer needed, remove rules from the source or target range (`Home > Conditional Formatting > Clear Rules`).
+   - **Remove Macro:** If the macro is no longer needed, delete the module and UserForm, then save the workbook as `.xlsx` for broader compatibility.
+
+
+#### **Limitations:**
+- **Static Formats:** Copied formats are static, losing any conditional formatting rules in the target range.
+- **Performance:** Processing large ranges (e.g., thousands of cells) may be slow due to cell-by-cell copying.
+- **UserForm Dependency:** Requires importing both `.frm` and `.frx` files correctly for the UserForm to function.
+- **Manual Input Option:** Users can type range addresses, which may lead to errors if invalid (e.g., `Z1:AA10`), though validation catches most issues.
+
+
+#### **Troubleshooting:**
+
+- **Import Errors:**
+  - Ensure `CopyConditionalFillColorForm.frx` is in the same directory as `CopyConditionalFillColorForm.frm`.
+  - Use Notepad to verify the `.frm` file starts with `VERSION 5.00` and includes `OleObjectBlob = "CopyConditionalFillColorForm.frx":0000`.
+  - If errors persist, manually create or update the UserForm in the VBE and export new `.frm` and `.frx` files (see [Manual Creation](#manual-creation)).
+
+- **Range Selection Issues:**
+  - Ensure macros are enabled (`Developer > Macro Security > Enable All Macros` for testing).
+  - If the range selection dialog fails, test `Application.InputBox(Type:=8)` in a separate macro.
+  - Confirm selected ranges are on the correct worksheets (e.g., source range on the source worksheet).
+
+- **Validation Errors:**
+  - If you see “Source and target ranges must have the same number of cells,” ensure the selected ranges match in size (e.g., both 3x3 cells).
+  - Check that worksheet and range inputs are valid (e.g., no typos in range addresses, valid worksheet names).
+  - Ensure at least one property CheckBox is selected.
+
+- **Formatting Not Applied:**
+  - Verify the source range has conditional formatting applied (`Home > Conditional Formatting > Manage Rules`).
+  - Check that the correct worksheets are selected in the dropdowns.
+
+- **Excel Version:** Some features (e.g., `DisplayFormat`) require Excel 2010 or later. Test on your version (e.g., 2016, 365).
+  
+  -----------------------------------------------------------------------------------------------
