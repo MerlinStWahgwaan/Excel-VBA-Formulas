@@ -425,7 +425,7 @@ This macro enables you to convert conditional formatting into static formats, al
    - Import **BOTH** `CopyConditionalFillColor.bas` and `CopyConditionalFillColorForm.frm` into your VBA project (see [Steps to Install Custom VBA Formulas via Import](#steps-to-install-custom-vba-formulas-via-import--bas--or-cls-)).
 
 2. ##### **Manual Creation (Fallback):**
-   - See [Manual Form Creation Instructions](CopyConditionalFillColorForm---Manual-Form-Creation-Instructions.md)
+   - See [Manual Form Creation Instructions](CopyConditionalFillColorForm - Manual Form Creation Instructions.md)
 
 #### **How It Works:**
 
