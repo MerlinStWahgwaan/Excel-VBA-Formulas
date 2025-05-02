@@ -306,6 +306,7 @@ This is a class module named `ThisWorkbook`, which is a special object in Excel 
 This `ThisWorkbook` module ensures that all formulas are recalculated whenever you switch sheets, edit cells, or leave a sheet. It’s a heavy-handed approach to keep everything up-to-date, likely paired with volatile functions like `PrevSheet` to guarantee dynamic references work correctly. However, it sacrifices performance for certainty, so it’s best suited for smaller workbooks or scenarios where absolute consistency outweighs speed.
 
 ---
+```vba
 **Code:**
 
 Private Sub Workbook_SheetActivate(ByVal Sh As Object)
@@ -319,7 +320,7 @@ End Sub
 Private Sub Workbook_SheetDeactivate(ByVal Sh As Object)
     Application.CalculateFull ' Recalculate all formulas when leaving a sheet
 End Sub
-
+```
 ---
 
 #### Breakdown of Components
