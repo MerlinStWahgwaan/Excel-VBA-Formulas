@@ -21,12 +21,17 @@ so i figured I'd share.
 
 [Key Differences between SumByColor and SumConditionColorCells](#key-differences-between-sumbycolor-and-sumconditioncolorcells)
 
-
 #### Custom Actions
 
 [Add Sheet Change Action](#-addsheetchangeaction-----add-to-thisworkbook-)
 
 [Copy Conditionally Formated Fill Color](#copyconditionalfillcolor---add-as-module-and-userform)
+
+[Flag Rows for Deletion](#flag-rows-for-deletion----add-as-module-)
+
+#### Custom Scripts
+
+[Export Excel to Markdown](#export-excel-to-markdown----run-as-python-script-)
 
 ----------------------------------------------------------------------------------------------
 
@@ -530,4 +535,205 @@ This macro enables you to convert conditional formatting into static formats, al
 
 - **Excel Version:** Some features (e.g., `DisplayFormat`) require Excel 2010 or later. Test on your version (e.g., 2016, 365).
   
+  -----------------------------------------------------------------------------------------------
+
+### `Flag Rows for Deletion` - * Add as Module *
+
+#### **Purpose:**
+Flags rows in an Excel worksheet for deletion based on blocks of identical values in a specified column. Rows with a “Preliminary” (`PrelimText`) status are marked as “Delete” if a “Validated” (`ValidText`) row exists in the same block; otherwise, they are marked as “Keep”. Valid rows are always marked “Keep”, and rows with empty or invalid status are marked “Invalid”. The results are written to a helper column for filtering and review.
+
+#### **How it Works:**
+- **Inputs (Customizable Constants):**
+  - `BlockColumn`: Column with block identifiers (e.g., `A` for numbers or text like `1001`, `Group1`).
+  - `StatusColumn`: Column with status text (e.g., `C` for `Preliminary` or `Validated`).
+  - `OutputColumn`: Column to write results (e.g., `D` for `Delete`, `Keep`, `Invalid`).
+  - `PrelimText`: Text for preliminary status (default: `preliminary`, case-insensitive).
+  - `ValidText`: Text for validated status (default: `validated`, case-insensitive).
+  - `DeleteOutput`, `KeepOutput`, `InvalidOutput`: Output labels (defaults: `Delete`, `Keep`, `Invalid`).
+  - `StartRow`, `EndRow`: Row range to process (e.g., `3` to `3433`).
+  - `OutputHeader`: Header for the output column (default: `Delete Check`).
+- **Logic:**
+  1. Validates inputs (row range, columns, text settings) and displays errors if invalid.
+  2. Sets the output column header (e.g., `D1 = "Delete Check"`).
+  3. Optimizes performance by disabling screen updates, calculations, and events.
+  4. Loops through rows to identify blocks (consecutive rows with the same `BlockColumn` value).
+  5. For each block:
+     - Checks if the block is valid (no empty `BlockColumn` cells).
+     - Scans for any `ValidText` (e.g., `validated`) in the `StatusColumn`.
+     - Flags rows:
+       - `Invalid` for empty or non-matching status.
+       - `Delete` for `PrelimText` rows if a `ValidText` row exists in the block.
+       - `Keep` for `ValidText` rows or `PrelimText` rows without a `ValidText` row.
+  6. Writes results to `OutputColumn` and restores Excel settings.
+  7. Displays a message indicating completion and instructions for filtering.
+- **Key Features:**
+  - Case-insensitive status comparison for flexibility.
+  - Configurable via constants for easy customization.
+  - Validates inputs to prevent runtime errors.
+  - Optimized for performance with large datasets (disables screen updates, etc.).
+  - Outputs to a helper column for easy filtering and manual review.
+
+#### **Example Use Case:**
+- You have a dataset in `A3:C3433` where column `A` groups rows by project ID, column `C` indicates status (`Preliminary` or `Validated`), and you want to flag rows in column `D`. Running the macro marks rows for deletion if a `Validated` row exists in the same project ID block, helping clean up preliminary data.
+
+#### **Example Data:**
+
+##### Raw Data:
+This sample dataset shows a worksheet with 20 rows of data (rows 3 to 22, assuming headers in row 1 and a blank row 2 for simplicity). Column `A` contains block identifiers (Project IDs 1001 to 1005), column `C` contains status (`Preliminary`, `Validated`, or invalid/empty), and column `B` contains irrelevant data (descriptions) to simulate a realistic dataset. The macro processes rows 3 to 22, with `BlockColumn = "A"`, `StatusColumn = "C"`, `OutputColumn = "D"`, `StartRow = 3`, `EndRow = 22`, `PrelimText = "Preliminary"`, `ValidText = "Validated"`, `DeleteOutput = "Delete"`, `KeepOutput = "Keep"`, and `InvalidOutput = "Invalid"`.
+
+| A (Project ID) | B (Description)         | C (Status)     | D (Delete Check) |
+|----------------|-------------------------|----------------|------------------|
+| 1001           | Initial draft           | Preliminary    |                  |
+| 1001           | Revised draft           | Validated      |                  |
+| 1001           | Notes                   | Preliminary    |                  |
+| 1001           | Planning doc            | Preliminary    |                  |
+| 1001           | Review comments         | Validated      |                  |
+| 1002           | Data analysis           | Preliminary    |                  |
+| 1002           | Interim report          | Preliminary    |                  |
+| 1002           | Raw data set            | Preliminary    |                  |
+| 1002           | Summary stats           | Preliminary    |                  |
+| 1003           | Test case               | Validated      |                  |
+| 1003           | Experiment log          | Preliminary    |                  |
+| 1003           | Validation notes        | Validated      |                  |
+| 1003           | Draft results           | Preliminary    |                  |
+| 1004           | Summary                 | Invalid        |                  |
+| 1004           | Backup data             | Preliminary    |                  |
+| 1004           | Old draft               | Preliminary    |                  |
+| 1004           | Notes                   | N/A            |                  |
+| 1005           | Test plan               | Preliminary    |                  |
+| 1005           |                        | Preliminary    |                  |
+| 1005           | Temporary notes         | Pending        |                  |
+
+##### Processed Data:
+After running `FlagRowsForDeletion`, column `D` is populated with flags based on the logic:
+- **Block 1001:** Contains two `Validated` rows, so `Preliminary` rows are marked `Delete`, and `Validated` rows are `Keep`.
+- **Block 1002:** No `Validated` rows, so all `Preliminary` rows are `Keep`.
+- **Block 1003:** Contains two `Validated` rows, so `Preliminary` rows are `Delete`, and `Validated` rows are `Keep`.
+- **Block 1004:** Contains invalid status values (`Invalid`, `N/A`), so they’re marked `Invalid`; `Preliminary` rows are `Keep` since no `Validated` row exists.
+- **Block 1005:** Contains an empty `BlockColumn` in row 20 and invalid status (`Pending`) in row 22, so all rows are `Invalid`.
+
+| A (Project ID) | B (Description)         | C (Status)     | D (Delete Check) |
+|----------------|-------------------------|----------------|------------------|
+| 1001           | Initial draft           | Preliminary    | Delete           |
+| 1001           | Revised draft           | Validated      | Keep             |
+| 1001           | Notes                   | Preliminary    | Delete           |
+| 1001           | Planning doc            | Preliminary    | Delete           |
+| 1001           | Review comments         | Validated      | Keep             |
+| 1002           | Data analysis           | Preliminary    | Keep             |
+| 1002           | Interim report          | Preliminary    | Keep             |
+| 1002           | Raw data set            | Preliminary    | Keep             |
+| 1002           | Summary stats           | Preliminary    | Keep             |
+| 1003           | Test case               | Validated      | Keep             |
+| 1003           | Experiment log          | Preliminary    | Delete           |
+| 1003           | Validation notes        | Validated      | Keep             |
+| 1003           | Draft results           | Preliminary    | Delete           |
+| 1004           | Summary                 | Invalid        | Invalid          |
+| 1004           | Backup data             | Preliminary    | Keep             |
+| 1004           | Old draft               | Preliminary    | Keep             |
+| 1004           | Notes                   | N/A            | Invalid          |
+| 1005           | Test plan               | Preliminary    | Invalid          |
+| 1005           |                        | Preliminary    | Invalid          |
+| 1005           | Temporary notes         | Pending        | Invalid          |
+
+#### **Limitations:**
+- Requires non-empty `BlockColumn` values for valid blocks; empty cells mark the entire block as `Invalid`.
+- Case-insensitive comparison may not distinguish nuanced status text (e.g., `PRELIM` vs. `Preliminary`).
+- Processes only the specified row range (`StartRow` to `EndRow`).
+- Overwrites existing data in `OutputColumn` without warning.
+- Performance may slow with very large datasets due to row-by-row processing.
+
+#### **How to Install:**
+1. **Open VBA Editor:** Press `Alt + F11` in Excel.
+2. **Insert Module:** Right-click your workbook in the Project window, select `Insert > Module`.
+3. **Import or Paste Code:** Import `FlagRowsForDeletion.bas` (see [Steps to Install Custom VBA Formulas via Import](#steps-to-install-custom-vba-formulas-via-import--bas--or-cls-)) or copy-paste the code.
+4. **Save Workbook:** Save as `.xlsm` (macro-enabled format).
+5. **Customize Constants:** Edit constants (e.g., `BlockColumn`, `StartRow`) in the code to match your data layout.
+6. **Run the Macro:** Go to `Developer > Macros`, select `FlagRowsForDeletion`, and click `Run`.
+
+#### **How to Use:**
+1. Ensure your data has columns for block identifiers (e.g., `A`), status (e.g., `C`), and an output column (e.g., `D`).
+2. Adjust constants in the code (e.g., `StartRow = 3`, `EndRow = 3433`, `BlockColumn = "A"`) to match your dataset.
+3. Run the macro via `Developer > Macros > FlagRowsForDeletion`.
+4. Check the output column (e.g., `D`) for `Delete`, `Keep`, or `Invalid` flags.
+5. Filter for `Delete` to identify rows for removal, and review `Invalid` flags for data errors.
+6. Optionally, delete flagged rows manually or with another macro.
+
+#### **Troubleshooting:**
+- **Invalid Row Range:** Ensure `StartRow` and `EndRow` are valid and `EndRow >= StartRow`.
+- **Invalid Columns:** Verify `BlockColumn`, `StatusColumn`, and `OutputColumn` are single letters (e.g., `A`, `D`).
+- **No Output:** Check that macros are enabled (`Developer > Macro Security > Enable All Macros` for testing).
+- **Incorrect Flagging:** Confirm `PrelimText` and `ValidText` match your data’s status text exactly (case-insensitive).
+- **Performance Issues:** For very large datasets, reduce `EndRow` or optimize the data range before running.
+
+  -----------------------------------------------------------------------------------------------
+
+## Custom Scripts
+
+### `Export Excel to Markdown` - * Run as Python Script *
+
+#### **Purpose:**
+Converts a specified range of an Excel worksheet into a Markdown table, saved to a text file. This script is useful for extracting tabular data from Excel and formatting it for use in Markdown-based documentation, such as GitHub READMEs or wikis.
+
+#### **How it Works:**
+- **Inputs:**
+  - `file_path`: Path to the Excel file (e.g., `C:/path/to/file.xlsx` or a file in the same directory).
+  - `sheet_name`: Name of the worksheet to process.
+  - `range_str`: Excel range (e.g., `A1:G60`) specifying the data to convert.
+- **Logic:**
+  1. Prompts the user for the Excel file path, sheet name, and range.
+  2. Validates the file path and checks if the file exists.
+  3. Lists available sheet names for user reference.
+  4. Parses the input range (e.g., `A1:G60`) into start/end columns and rows using `parse_range`.
+  5. Converts column letters (e.g., `A`, `G`) to 0-based indices using `col_letter_to_index`.
+  6. Reads the specified sheet using `pandas.read_excel` with the `openpyxl` engine.
+  7. Validates the range against the sheet’s dimensions.
+  8. Extracts the specified rows and columns from the DataFrame.
+  9. Creates a Markdown table using `create_markdown_table`, including headers, a separator row, and data rows.
+  10. Saves the table to `ExcelToMarkdown.txt` in the current directory.
+- **Key Features:**
+  - Handles arbitrary Excel ranges and validates inputs to prevent errors.
+  - Uses `pandas` for efficient Excel reading and data manipulation.
+  - Outputs clean, GitHub-compatible Markdown tables.
+  - Replaces `NaN` or null values with empty strings in the output table.
+- **Dependencies:**
+  - Requires `pandas`, `openpyxl`, and standard Python libraries (`re`, `os`).
+  - Install via: `pip install pandas openpyxl`
+
+#### **Example Use Case:**
+- You have an Excel file `data.xlsx` with a sheet `Sales` containing a table in `A1:D10` (e.g., columns: `Date`, `Product`, `Quantity`, `Price`). Running the script with inputs `data.xlsx`, `Sales`, and `A1:D10` generates a Markdown table in `ExcelToMarkdown.txt` that can be copied into a README or wiki.
+
+#### **Limitations:**
+- Requires valid Excel files (`.xlsx`, `.xlsm`) and correct sheet names.
+- Range must be in `A1:G60` format and within the sheet’s data boundaries.
+- Does not preserve cell formatting (e.g., colors, fonts) or formulas, only values.
+- Output file (`ExcelToMarkdown.txt`) overwrites any existing file with the same name.
+
+#### **How to Use:**
+1. **Install Dependencies:**
+   - Ensure Python is installed, then run:
+     ```bash
+     pip install pandas openpyxl
+     ```
+2. **Save the Script:**
+   - Save `ExportExcelToMarkdown.py` in your working directory.
+3. **Run the Script:**
+   - Open a terminal, navigate to the script’s directory, and run:
+     ```bash
+     python ExportExcelToMarkdown.py
+     ```
+4. **Provide Inputs:**
+   - Enter the Excel file path (e.g., `data.xlsx` or `C:/path/to/data.xlsx`).
+   - Enter the sheet name (e.g., `Sales`).
+   - Enter the range (e.g., `A1:D10`).
+5. **Check Output:**
+   - Open `ExcelToMarkdown.txt` to view the generated Markdown table.
+   - Copy the table into a Markdown file (e.g., a GitHub README).
+
+#### **Troubleshooting:**
+- **File Not Found:** Ensure the file path is correct and the file exists.
+- **Invalid Sheet:** Verify the sheet name matches one listed when the script displays available sheets.
+- **Invalid Range:** Use the format `A1:G60` and ensure the range is within the sheet’s data.
+- **Dependency Errors:** Install `pandas` and `openpyxl` if missing.
+- **Output Overwritten:** Rename or move `ExcelToMarkdown.txt` before running the script again.
+
   -----------------------------------------------------------------------------------------------
