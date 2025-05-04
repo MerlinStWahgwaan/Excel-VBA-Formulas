@@ -3,7 +3,8 @@ If importing the `.frm` file fails or you need to recreate the UserForm:
 1. In the VBE, go to `Insert > UserForm`.
 2. Set UserForm properties: `Name` = `CopyConditionalFillColorForm`, `Caption` = `Copy Conditional Formatting Properties`, `Height` = 330, `Width` = 410.
 3. Add controls via the Toolbox:
-   - **Use FormControlList.txt** to recreate form manually
+   - **Use FormControlList.txt** to recreate form manually:
+    - [FormControlList.txt](docs/FormControlsList.txt)
 
 4. Add UserForm code (double-click the UserForm, paste in the Code Window):
    ```vba
