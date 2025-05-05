@@ -3,7 +3,9 @@
 This is an evolving repo of custom Excel VBA that I've put together and found useful in many circumstances,
 so i figured I'd share.
 
-#### Sections
+## Sections
+
+### Basic Excel VBA Help
 
 [Steps to Enable/Access the VBA Editor](#steps-to-enableaccess-the-vba-editor)
 
@@ -32,6 +34,8 @@ so i figured I'd share.
 #### Custom Scripts
 
 [Export Excel to Markdown](#export-excel-to-markdown----run-as-python-script-)
+
+[Excel VBA Workbook Generator](#Excel-VBA-Workbook-Generator-----Run-as-PowerShell-Script--)
 
 ----------------------------------------------------------------------------------------------
 
@@ -535,7 +539,7 @@ This macro enables you to convert conditional formatting into static formats, al
 
 - **Excel Version:** Some features (e.g., `DisplayFormat`) require Excel 2010 or later. Test on your version (e.g., 2016, 365).
   
-  -----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
 ### `Flag Rows for Deletion` - * Add as Module *
 
@@ -665,7 +669,7 @@ After running `FlagRowsForDeletion`, column `D` is populated with flags based on
 - **Incorrect Flagging:** Confirm `PrelimText` and `ValidText` match your data’s status text exactly (case-insensitive).
 - **Performance Issues:** For very large datasets, reduce `EndRow` or optimize the data range before running.
 
-  -----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
 ## Custom Scripts
 
@@ -736,4 +740,108 @@ Converts a specified range of an Excel worksheet into a Markdown table, saved to
 - **Dependency Errors:** Install `pandas` and `openpyxl` if missing.
 - **Output Overwritten:** Rename or move `ExcelToMarkdown.txt` before running the script again.
 
-  -----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+### Excel VBA Workbook Generator - * Run as PowerShell Script *
+
+#### **Overview**
+
+This PowerShell script automates the creation of a macro-enabled Excel workbook (`.xlsm`) by importing all VBA modules (`.bas`), class modules (`.cls`), and user forms (`.frm`) from a specified directory or the script’s directory. It’s designed for users who want to quickly generate Excel workbooks pre-loaded with custom VBA code. The script is double-clickable, requires no runtime input, and handles file name conflicts by appending numbers (e.g., `NewWorkbookWithModules1.xlsm`).
+
+When run without customization in the root of this repository, the script will:
+- Use all VBA files (`.bas`, `.cls`, `.frm`) within the repository (including subdirectories).
+- Create a new `.xlsm` file in the repository’s root directory, embedding all custom VBA from the repo.
+
+#### **Features**
+
+- **Dynamic Directories**: Source VBA files and output the `.xlsm` file to user-defined directories or default to the script’s directory.
+- **Automatic VBA Import**: Imports `.bas` (modules), `.cls` (class modules), and `.frm` (user forms) from the specified directory and subdirectories.
+- **File Name Conflict Handling**: Appends `1`, `2`, `3`, etc., to the output file name if it already exists.
+- **Double-Click Simplicity**: Run by double-clicking, with no user input required during execution.
+- **Error Handling**: Validates directories, skips invalid VBA files, and logs errors.
+
+#### **Requirements**
+
+- **Microsoft Excel**: 2016 or later, installed on the system.
+- **PowerShell**: Version 5.1 or later (included with Windows).
+- **VBA Project Access**:
+  - Enable `Trust access to the VBA project object model` in Excel:
+    - Go to `File` > `Options` > `Trust Center` > `Trust Center Settings` > `Macro Settings`.
+    - Check `Trust access to the VBA project object model`.
+- **PowerShell Execution Policy**:
+  - Allow local scripts for double-clicking:
+    ```powershell
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+    ```
+    Run this in PowerShell as an administrator (one-time setup).
+
+#### **Usage**
+
+##### Quick Start (No Customization)
+1. **Download the Repository**:
+   - Clone or download this repository to your computer.
+2. **Place VBA Files**:
+   - Ensure your `.bas`, `.cls`, `.frm`, and corresponding `.frx` files are in the repository’s root or subdirectories.
+3. **Run the Script**:
+   - Double-click `ExcelWorkbookWithDynamicVBADirectory.ps1` in the repository’s root.
+   - The script will:
+     - Source all VBA files from the repository (root and subdirectories).
+     - Create `NewWorkbookWithModules.xlsm` (or with a number, e.g., `NewWorkbookWithModules1.xlsm`) in the repository’s root.
+4. **Verify Output**:
+   - Open the generated `.xlsm` file in Excel.
+   - Press `Alt + F11` to check the VBA Editor for imported modules and forms.
+
+##### **Customizing Directories**
+1. **Edit the Script**:
+   - Open `ExcelWorkbookWithDynamicVBADirectory.ps1` in a text editor (e.g., Notepad, VS Code).
+   - Modify the following variables at the top:
+     ```powershell
+     $VBA_FILES_DIR = ""                     # Empty = script directory, or set path (e.g., "C:\Scripts\VBAFiles")
+     $OUTPUT_DIR = ""                        # Empty = script directory, or set path (e.g., "C:\Scripts\Output")
+     $OUTPUT_BASE_NAME = "NewWorkbookWithModules"  # Output file base name
+     ```
+     - **Examples**:
+       - Use repository root for both VBA and output:
+         ```powershell
+         $VBA_FILES_DIR = ""
+         $OUTPUT_DIR = ""
+         ```
+       - Specific VBA directory, output to repository root:
+         ```powershell
+         $VBA_FILES_DIR = "C:\Scripts\VBAFiles"
+         $OUTPUT_DIR = ""
+         ```
+       - Specific directories for both:
+         ```powershell
+         $VBA_FILES_DIR = "C:\Scripts\VBAFiles"
+         $OUTPUT_DIR = "C:\Scripts\Output"
+         ```
+2. **Save and Run**:
+   - Save the script.
+   - Double-click `ExcelWorkbookWithDynamicVBADirectory.ps1` to generate the `.xlsm` file in the specified or default directory.
+
+##### **Example Directory Structure**
+If the script is in `C:\Scripts` and `$VBA_FILES_DIR = ""`, the structure might look like:
+C:\Scripts
+  ExcelWorkbookWithDynamicVBADirectory.ps1
+  Module1.bas
+  Class1.cls
+  UserForm1.frm
+  UserForm1.frx
+  Subfolder
+    Module2.bas
+
+Running the script creates `C:\Scripts\NewWorkbookWithModules.xlsm` with all VBA imported.
+
+#### **Notes**
+- **Double-Clicking**: If the script opens in a text editor, right-click and select `Run with PowerShell`. Ensure the execution policy is set to `RemoteSigned`.
+- **User Forms**: Ensure `.frm` files have their `.frx` files in the same directory for forms with controls.
+- **Console Output**: Logs (e.g., imported files, errors) appear in a PowerShell console, which may flash briefly. Run manually (`powershell .\ExcelWorkbookWithDynamicVBADirectory.ps1`) for persistent logs.
+- **Output File Naming**: If `NewWorkbookWithModules.xlsm` exists, the script uses `NewWorkbookWithModules1.xlsm`, `NewWorkbookWithModules2.xlsm`, etc.
+
+#### **Troubleshooting**
+- **"File cannot be loaded"**: Run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` in PowerShell as admin.
+- **"VBA project access denied"**: Enable `Trust access to the VBA project object model` in Excel settings.
+- **No VBA files imported**: Verify `.bas`, `.cls`, or `.frm` files exist in the specified or script directory and are valid.
+
+-----------------------------------------------------------------------------------------------
