@@ -35,7 +35,7 @@ so i figured I'd share.
 
 [Export Excel to Markdown](#export-excel-to-markdown----run-as-python-script-)
 
-[Excel VBA Workbook Generator](#Excel-VBA-Workbook-Generator-----Run-as-PowerShell-Script--)
+[Excel VBA Workbook Generator](#excel-vba-workbook-generator----run-as-powershell-script-)
 
 ----------------------------------------------------------------------------------------------
 
