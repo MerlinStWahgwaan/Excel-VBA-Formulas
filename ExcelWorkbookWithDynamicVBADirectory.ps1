@@ -2,9 +2,11 @@
 # User can set VBA_FILES_DIR and OUTPUT_DIR; both default to script directory if empty
 
 # User-configurable directories (adjust these paths before running, or leave empty for script directory)
-$VBA_FILES_DIR = ""                     # Directory containing .bas, .cls, .frm files (including subdirectories); empty = script directory
-$OUTPUT_DIR = ""                        # Directory where the .xlsm file will be saved; empty = script directory
-$OUTPUT_BASE_NAME = "NewWorkbookWithModules"  # Base name for the output file (without extension)
+param (
+[string]$VBA_FILES_DIR = "",                     # Directory containing .bas, .cls, .frm files (including subdirectories); empty = script directory
+[string]$OUTPUT_DIR = "",                        # Directory where the .xlsm file will be saved; empty = script directory
+[string]$OUTPUT_BASE_NAME = "NewWorkbookWithModules"  # Base name for the output file (without extension)
+)
 
 # Initialize Excel COM object
 $excel = $null

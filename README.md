@@ -755,9 +755,10 @@ When run without customization in the root of this repository, the script will:
 #### **Features**
 
 - **Dynamic Directories**: Source VBA files and output the `.xlsm` file to user-defined directories or default to the script’s directory.
+- - The `param` block defines the parameters the script can accept, including from Shrtcuts! :-) See [Shortcuts]()
 - **Automatic VBA Import**: Imports `.bas` (modules), `.cls` (class modules), and `.frm` (user forms) from the specified directory and subdirectories.
 - **File Name Conflict Handling**: Appends `1`, `2`, `3`, etc., to the output file name if it already exists.
-- **Double-Click Simplicity**: Run by double-clicking, with no user input required during execution.
+- **Double-Click Simplicity**: Run by double-clicking, or right-click + "Run with Powershell", with no user input required during execution.
 - **Error Handling**: Validates directories, skips invalid VBA files, and logs errors.
 
 #### **Requirements**
@@ -820,8 +821,44 @@ When run without customization in the root of this repository, the script will:
    - Save the script.
    - Double-click `ExcelWorkbookWithDynamicVBADirectory.ps1` to generate the `.xlsm` file in the specified or default directory.
 
+3.  **Create a Shortcut for Passing Variables - Optional**
+
+- This will allow you to pass/edit the variables via shortcuts, instead of within the code itself, allowing for multiple shortcuts with different settings
+
+
+    - Right-click  `ExcelWorkbookWithDynamicVBADirectory.ps1`, select "Show More Options > Send to > Desktop (create shortcut)" to generate the shortcut on the desktop.
+    - Right-click the new desktop Shortcut, select `Properties`
+    - In the `Target` field, input the following command parameters below;
+
+    or
+
+    - Right-click anywhere, select "New > Shortcut"
+    - In the Type the location of the item field, enter the command to run PowerShell with your script and parameters:
+
+    Example Command Parameters:
+
+    *Be sure to replace the directories with your own, as needed*
+
+     ```
+     -File "C:\Path\To\Your\Script.ps1"
+     -VBA_FILES_DIR "C:\Users\Admin\VBAFiles"
+     -OUTPUT_DIR "C:\Users\Admin\Desktop"
+     -OUTPUT_BASE_NAME "CustomWorkbook" 
+     ```
+    
+    ```C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File  "C:\Path\To\Your\Script.ps1" -VBA_FILES_DIR "C:\Users\Admin\VBAFiles" -OUTPUT_DIR "C:\Users\Admin\Desktop" -OUTPUT_BASE_NAME "CustomWorkbook"```
+
+    or with blank/default variables:
+
+    ```C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File  "C:\Path\To\Your\Script.ps1" -VBA_FILES_DIR "" -OUTPUT_DIR "" -OUTPUT_BASE_NAME ""```
+    
+- Name the Shortcut as per your needs.
+    
+
 ##### **Example Directory Structure**
+
 If the script is in `C:\Scripts` and `$VBA_FILES_DIR = ""`, the structure might look like:
+```
 C:\Scripts
   ExcelWorkbookWithDynamicVBADirectory.ps1
   Module1.bas
@@ -830,6 +867,7 @@ C:\Scripts
   UserForm1.frx
   Subfolder
     Module2.bas
+```
 
 Running the script creates `C:\Scripts\NewWorkbookWithModules.xlsm` with all VBA imported.
 
