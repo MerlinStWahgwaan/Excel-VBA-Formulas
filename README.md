@@ -755,7 +755,7 @@ When run without customization in the root of this repository, the script will:
 #### **Features**
 
 - **Dynamic Directories**: Source VBA files and output the `.xlsm` file to user-defined directories or default to the script’s directory.
-- - The `param` block defines the parameters the script can accept, including from Shrtcuts! :-) See [Shortcuts]()
+- - The `param` block defines the parameters the script can accept, including from Shrtcuts! :-) See [Shortcuts](#3--create-a-shortcut-for-passing-variables---optional)
 - **Automatic VBA Import**: Imports `.bas` (modules), `.cls` (class modules), and `.frm` (user forms) from the specified directory and subdirectories.
 - **File Name Conflict Handling**: Appends `1`, `2`, `3`, etc., to the output file name if it already exists.
 - **Double-Click Simplicity**: Run by double-clicking, or right-click + "Run with Powershell", with no user input required during execution.
