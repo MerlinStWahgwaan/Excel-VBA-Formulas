@@ -793,7 +793,7 @@ When run without customization in the root of this repository, the script will:
    - Press `Alt + F11` to check the VBA Editor for imported modules and forms.
 
 ##### **Customizing Directories**
-1. **Edit the Script**:
+###### 1. **Edit the Script**:
    - Open `ExcelWorkbookWithDynamicVBADirectory.ps1` in a text editor (e.g., Notepad, VS Code).
    - Modify the following variables at the top:
      ```powershell
@@ -817,11 +817,11 @@ When run without customization in the root of this repository, the script will:
          $VBA_FILES_DIR = "C:\Scripts\VBAFiles"
          $OUTPUT_DIR = "C:\Scripts\Output"
          ```
-2. **Save and Run**:
+###### 2. **Save and Run**:
    - Save the script.
    - Double-click `ExcelWorkbookWithDynamicVBADirectory.ps1` to generate the `.xlsm` file in the specified or default directory.
 
-3.  **Create a Shortcut for Passing Variables - Optional**
+###### 3.  **Create a Shortcut for Passing Variables - Optional**
 
 - This will allow you to pass/edit the variables via shortcuts, instead of within the code itself, allowing for multiple shortcuts with different settings
 
